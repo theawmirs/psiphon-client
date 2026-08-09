@@ -1,0 +1,5 @@
+# Git internals / logs only.
+# NOTE: psiphon-x86_64, psiphon-aarch64, and datastore/ are intentionally
+# committed — the Docker image depends on them.
+.git/
+*.log
