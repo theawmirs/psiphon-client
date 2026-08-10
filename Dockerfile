@@ -4,9 +4,11 @@
 # reach it from outside.
 #
 # IMPORTANT: the datastore/ dir ships PRE-SEEDED psiphon.boltdb files (copied
-# from a working server). A fresh empty boltdb means the tunnel takes a very
-# long time to establish (~10+ min); with a seeded DB the tunnel is up in
-# seconds. Each region gets its own datastore so multiple instances don't
+# from a working server). psiphon expects its store at
+#   <DataRootDirectory>/ca.psiphon.PsiphonTunnel.tunnel-core/datastore/psiphon.boltdb
+# A fresh empty store means the tunnel takes a very long time to establish
+# (~10+ min) and often times out; with a seeded DB the tunnel is up in
+# seconds. Each region gets its own store so multiple instances don't
 # contend on the same boltdb lock.
 
 FROM debian:bookworm-slim
@@ -19,7 +21,8 @@ RUN chmod +x /usr/local/bin/psiphon /usr/local/bin/psiphon-arm64
 # its DataRootDirectory at /data/<REGION>.
 COPY configs/ /etc/psiphon/configs/
 
-# Pre-seeded datastores per region (see note above).
+# Pre-seeded datastores per region — laid out EXACTLY like psiphon expects:
+# /data/<REGION>/ca.psiphon.PsiphonTunnel.tunnel-core/datastore/psiphon.boltdb
 COPY datastore/ /data/
 
 # Entrypoint: starts the requested regions as background jobs, then waits.
